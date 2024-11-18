@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MyController {
 
     @GetMapping("/my")
-    @ResponseBody
     public String myAPI() {
 
         return "my route";

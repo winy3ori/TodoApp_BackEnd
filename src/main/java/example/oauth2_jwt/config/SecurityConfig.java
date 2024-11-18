@@ -1,5 +1,6 @@
 package example.oauth2_jwt.config;
 
+import example.oauth2_jwt.jwt.JWTFilter;
 import example.oauth2_jwt.jwt.JWTUtil;
 import example.oauth2_jwt.oauth2.CustomSuccessHandler;
 import example.oauth2_jwt.service.CustomOAuth2UserService;
@@ -11,6 +12,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -61,6 +63,12 @@ public class SecurityConfig {
         //HTTP Basic 인증 방식 disable
         http
                 .httpBasic((auth) -> auth.disable());
+
+        //JWTFilter 추가
+        http
+                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
+                // 여기 설정해줌으로써 재로그인 문제 해결
+                // OAuth2LoginAuthenticationFilter 뒤에 JWTFilter 위치 시킴
 
         //oauth2
         http
